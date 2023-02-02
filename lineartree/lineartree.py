@@ -214,12 +214,11 @@ class LinearTreeRegressor(_LinearTree, RegressorMixin):
             allow_nd=False,
             ensure_min_features=self.n_features_in_
         )
-        features = self._linear_features
+
         if self.n_targets_ > 1:
             pred = np.zeros((X.shape[0], self.n_targets_))
         elif (X.dtype.metadata is not None) and ('grad' in X.dtype.metadata):
             pred = np.zeros(X.shape)
-            features = X.shape[1]
         else:
             pred = np.zeros(X.shape[0])
 
@@ -229,7 +228,7 @@ class LinearTreeRegressor(_LinearTree, RegressorMixin):
             if (~mask).all():
                 continue
 
-            pred[mask] = L.model.predict(X[np.ix_(mask, features)])
+            pred[mask] = L.model.predict(X[np.ix_(mask, self._linear_features)])
 
         return pred
 
