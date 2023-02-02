@@ -188,7 +188,7 @@ class LinearTreeRegressor(_LinearTree, RegressorMixin):
 
         return self
 
-    def predict(self, X, **kwargs):
+    def predict(self, X):
         """Predict regression target for X.
 
         Parameters
@@ -217,7 +217,7 @@ class LinearTreeRegressor(_LinearTree, RegressorMixin):
         features = self._linear_features
         if self.n_targets_ > 1:
             pred = np.zeros((X.shape[0], self.n_targets_))
-        elif 'grad' in kwargs:
+        elif (X.dtype.metadata is not None) and ('grad' in X.dtype.metadata):
             pred = np.zeros(X.shape)
             features = X.shape[1]
         else:
@@ -229,7 +229,7 @@ class LinearTreeRegressor(_LinearTree, RegressorMixin):
             if (~mask).all():
                 continue
 
-            pred[mask] = L.model.predict(X[np.ix_(mask, features)], **kwargs)
+            pred[mask] = L.model.predict(X[np.ix_(mask, features)])
 
         return pred
 
