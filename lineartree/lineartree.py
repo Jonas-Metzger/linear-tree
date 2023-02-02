@@ -217,7 +217,7 @@ class LinearTreeRegressor(_LinearTree, RegressorMixin):
 
         if self.n_targets_ > 1:
             pred = np.zeros((X.shape[0], self.n_targets_))
-        elif (X.dtype.metadata is not None) and ('grad' in X.dtype.metadata):
+        elif hasattr(X.dtype, 'metadata') and (X.dtype.metadata is not None) and ('grad' in X.dtype.metadata):
             pred = np.zeros(X.shape)
         else:
             pred = np.zeros(X.shape[0])
